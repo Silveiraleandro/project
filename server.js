@@ -6,12 +6,12 @@ dotenv.config({ path: './config.env'});
 const server = require('./app');
 
 mongoose.connect(process.env.DATABASE, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+  useUnifiedTopology: true
 }).then( con => {
-    console.dir('Database is connected')
+  console.dir('Database is connected')
 });
 
 const PORT = process.env.PORT || 5000;
