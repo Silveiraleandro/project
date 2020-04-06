@@ -1,5 +1,12 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const authHelpers = require('./../helpers/auth');
+
+/*
+* Note dont use arrow operator for the callbacks,
+* which changes the scope of this.
+*/
+
 
 const userSchema = mongoose.Schema({
   firstName: {
@@ -33,12 +40,24 @@ const userSchema = mongoose.Schema({
   passwordConfirmation: {
     type: String,
     validate: {
-      validator: function(passConfirm) {
-        return passConfirm === this.password;
-      }
+      validator: function(val) { authHelpers.passwordConfirmed(this.password, val) },
+      message: 'passwords dont match'
     },
     required: [true, 'need to confirm password']
   }
+});
+
+// MIDDLEWARE
+userSchema.pre('save', async function(next) {
+  // We don't want to hash the password if its already been hashed
+  // i.e on user update operations
+  if (!this.isModified('password')) return next();
+  // hash the password
+  this.password = await authHelpers.hashPassword(this.password);
+  // We don't want to save the confirmation password
+  // it's only needed for validation undefined means it wont be persisted
+  this.passwordConfirmation = undefined;
+  next()
 });
 
 const User = mongoose.model('User', userSchema);
