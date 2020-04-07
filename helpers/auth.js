@@ -16,3 +16,14 @@ exports.createToken = async (payload) => {
       expiresIn: process.env.JWT_EXPIRES
     });
 };
+
+exports.cookieOptions = () => {
+  const options = {
+    expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60),
+    httpOnly: true
+  };
+  // Only set the secure option in production otherwise development wont work
+  if (process.env.NODE_ENV === 'production') options.secure = true;
+
+  return options
+};

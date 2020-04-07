@@ -12,10 +12,16 @@ exports.register = catchErrorAsync(async (req, res, next) => {
   );
   const jwt = await auth.createToken(user.id);
 
+  // send the cookie with the jwt back to the
+  // browser, the browser will then send this
+  // cookie back with all future requests for
+  // resources * Cookie expiry is in milliseconds *
+  res.cookie('jwt', jwt, auth.cookieOptions());
   res.status(201).json({
     status: 'created',
-    jwt,
-    data: user
+    data: {
+      user
+    }
   })
 });
 
@@ -27,10 +33,18 @@ exports.login = catchErrorAsync(async (req, res, next) => {
   const user = await User.findOne({email: email}).select('+password');
 
   if (await user.isAuthenticated(password, user.password)) {
-    jwt = await auth.createToken(user.id);
+    const jwt = await auth.createToken(user.id);
+
+    // send the cookie with the jwt back to the
+    // browser, the browser will then send this
+    // cookie back with all future requests for
+    // resources * Cookie expiry is in milliseconds *
+    res.cookie('jwt', jwt, auth.cookieOptions());
     res.status(200).json({
       status: 'authorized',
-      jwt
+      data: {
+        user
+      }
     })
   } else {
     res.status(401).json({
