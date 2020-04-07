@@ -17,6 +17,10 @@ exports.register = catchErrorAsync(async (req, res, next) => {
   // cookie back with all future requests for
   // resources * Cookie expiry is in milliseconds *
   res.cookie('jwt', jwt, auth.cookieOptions());
+
+  // Don't send the the user password back
+  user.password = undefined;
+
   res.status(201).json({
     status: 'created',
     data: {
@@ -40,6 +44,10 @@ exports.login = catchErrorAsync(async (req, res, next) => {
     // cookie back with all future requests for
     // resources * Cookie expiry is in milliseconds *
     res.cookie('jwt', jwt, auth.cookieOptions());
+
+    // Don't send the the user password back
+    user.password = undefined;
+
     res.status(200).json({
       status: 'authorized',
       data: {
