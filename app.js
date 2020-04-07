@@ -4,6 +4,7 @@ const path = require('path');
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
 
 // ROUTER IMPORTS
 const applicationRoutes = require('./routes/application/applicationRoutes');
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(helmet()); // Secure http headers https://npmjs.com/package/helmet
 app.use(cors()); // CORS -> Cross-origin resource sharing https://www.npmjs.com/package/cors
 app.use(express.json()); // JavaScript Object Notation for api requests response
+app.use(cookieParser()); // parse the cookies on request
 
 // Application Routes
 app.use('/', applicationRoutes);

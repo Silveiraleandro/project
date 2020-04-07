@@ -36,6 +36,8 @@ exports.login = catchErrorAsync(async (req, res, next) => {
 
   const user = await User.findOne({email: email}).select('+password');
 
+  if (!user) { return next( new Error('no account registered'))}
+
   if (await user.isAuthenticated(password, user.password)) {
     const jwt = await auth.createToken(user.id);
 

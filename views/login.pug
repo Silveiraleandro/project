@@ -1,0 +1,15 @@
+extends application
+
+block content
+  main.container
+    div.p-5.ml-5.mr-5
+      h3.text-center Sign In
+      form.login__form
+        div.form-group
+          label(for='email') Email Address
+          input#email.form-control(type='email', placeholder='Enter your email....', required)
+        div.form-group
+          label(for='password') Password
+          input#password.form-control(type='password', placeholder='Enter your password....', required)
+        div.form-group
+          button.btn.btn-success.btn-block Sign in
