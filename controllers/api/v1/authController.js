@@ -1,7 +1,7 @@
-const User = require('./../models/userModel');
-const catchErrorAsync = require('./../helpers/catchErrorAsync');
-const serializers = require('./../helpers/serializers');
-const auth = require('./../helpers/auth');
+const User = require('../../../models/userModel');
+const catchErrorAsync = require('../../../helpers/catchErrorAsync');
+const serializers = require('../../../helpers/serializers');
+const auth = require('../../../helpers/auth');
 
 exports.register = catchErrorAsync(async (req, res, next) => {
   // make sure we only permit the fields we want
