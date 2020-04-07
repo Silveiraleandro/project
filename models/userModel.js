@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const authHelpers = require('./../helpers/auth');
+const bcrypt = require('bcryptjs');
 
 /*
 * Note dont use arrow operator for the callbacks,
@@ -35,6 +36,7 @@ const userSchema = mongoose.Schema({
   password: {
     type: String,
     required: [true, 'user must have a password'],
+    select: false,
     minlength: [8, 'password must have more then 8 characters']
   },
   passwordConfirmation: {
@@ -59,6 +61,11 @@ userSchema.pre('save', async function(next) {
   this.passwordConfirmation = undefined;
   next()
 });
+
+// METHODS
+userSchema.methods.isAuthenticated = async function(password, hashPassword) {
+  return await bcrypt.compare(password, hashPassword);
+};
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;

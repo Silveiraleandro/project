@@ -20,5 +20,22 @@ exports.register = catchErrorAsync(async (req, res, next) => {
 });
 
 exports.login = catchErrorAsync(async (req, res, next) => {
+  const { email, password } = req.body;
 
-})
+  if (!email || !password) { return next( new Error('password and email required'))}
+
+  const user = await User.findOne({email: email}).select('+password');
+
+  if (await user.isAuthenticated(password, user.password)) {
+    jwt = await auth.createToken(user.id);
+    res.status(200).json({
+      status: 'authorized',
+      jwt
+    })
+  } else {
+    res.status(401).json({
+      status: 'unauthorized',
+      message: 'Password or email in correct'
+    })
+  }
+});
