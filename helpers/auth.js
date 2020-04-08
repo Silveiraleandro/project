@@ -1,3 +1,4 @@
+const { promisify } = require('util');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -15,6 +16,10 @@ exports.createToken = async (payload) => {
     process.env.SECRETE_KEY_BASE, {
       expiresIn: process.env.JWT_EXPIRES
     });
+};
+
+exports.isValid = async (token) => {
+  return promisify(jwt.verify(token, process.env.SECRETE_KEY_BASE));
 };
 
 exports.cookieOptions = () => {
